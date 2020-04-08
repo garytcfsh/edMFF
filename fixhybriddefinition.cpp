@@ -32,11 +32,14 @@ FixHybridDefinition::FixHybridDefinition()
     inputBoundaryRegion->setRegionFace( regionPath, regionFace);
 
     //change boundary condition of nodes
-    qDebug()<< "hybrid definition file (.mff): ";
     disError = 1;
     degError = 1;
     hybridPath = hybridPath + "merge";
     searchNodeOnRegionFace = new StoreDefinitionFileNodeOnRegionFace();
     searchNodeOnRegionFace->storeNodeOnRegionFace( hybridPath, regionFace, disError, degError);
+
+    //write file
+    modifyFile = new ModifyDefinitionFile();
+    modifyFile->writeFile( hybridPath, regionFace, disError);
 
 }

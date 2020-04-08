@@ -3,7 +3,7 @@
 
 #include "inputboundaryregion.h"
 #include "searchnodeonregionface.h"
-#include "modifydefinitionfile.h"
+#include "modifyfile.h"
 #include "mergefile.h"
 #include "face.h"
 #include <QStringList>
@@ -20,7 +20,7 @@ public:
 protected:
     InputBoundaryRegion *inputBoundaryRegion;
     SearchNodeOnRegionFace *searchNodeOnRegionFace;
-    ModifyDefinitionFile *modifyDefinitionFile;
+    ModifyFile *modifyFile;
     MergeFile *mergefile;
     QList< Face> *regionFace;
     float disError, degError;

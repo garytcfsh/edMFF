@@ -12,6 +12,7 @@
 #include "storedefinitionfilenodeonregionface.h"
 #include "storerestartfilenodeonregionface.h"
 #include "dfn2hybrid.h"
+#include "modifydefinitionfile.h"
 
 class FixHybridDefinition : public EdMff
 {

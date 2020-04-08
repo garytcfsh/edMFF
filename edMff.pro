@@ -24,6 +24,7 @@ SOURCES += \
         main.cpp \
         mergefile.cpp \
         modifydefinitionfile.cpp \
+        modifyfile.cpp \
         node.cpp \
         searchnodeonregionface.cpp \
         setconstanthead.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     inputboundaryregion.h \
     mergefile.h \
     modifydefinitionfile.h \
+    modifyfile.h \
     node.h \
     searchnodeonregionface.h \
     setconstanthead.h \
