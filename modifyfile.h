@@ -10,7 +10,7 @@ public:
     ModifyFile();
     virtual ~ModifyFile(){}
 
-    virtual void writeFile( QString, QList< Face>*, float){}
+    virtual void writeFile( QString, QList< Face>*, float, float){}
 };
 
 #endif // MODIFYFILE_H

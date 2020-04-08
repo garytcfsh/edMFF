@@ -37,12 +37,15 @@ void StoreDefinitionFileNodeOnRegionFace::storeNodeOnRegionFace(QString mffPath,
     QVector3D a, b;
     float dis, aDis, bDis, degree = 0;
     streamIn.seek( start);
+
     //pass header
     while (!oneLine.contains( "NODE"))
         oneLine = streamIn.readLine();
+
     //pass fracture nodes
     for (int i=0; i<fracNodeNum; i++)
         oneLine = streamIn.readLine();
+
     //store grid nodes which on the face
     sl[0] = "init";
     while (sl[0] != "0")
@@ -50,14 +53,16 @@ void StoreDefinitionFileNodeOnRegionFace::storeNodeOnRegionFace(QString mffPath,
         oneLine = streamIn.readLine();
         sl = oneLine.simplified().split(" ");
         node.setNode( sl[1].toFloat(), sl[2].toFloat(), sl[3].toFloat());
-        //check nodes are on the plane or not
+
+        //check whether nodes are in the area
         for (int i=0; i<regionFace->count(); i++)//for each faces
         {
+            //check whether nodes are on the plane which contains area
             dis = node.xyz.distanceToPlane( (*regionFace)[i].getApex()[0].xyz, (*regionFace)[i].getApex()[1].xyz, (*regionFace)[i].getApex()[2].xyz);
             if (dis < disError && dis > -disError)
             {
-//only handle convex polygon
-                //check nodes are in the area or not
+                //only handle convex polygon
+                //check whether nodes are in the area or not
                 degree = 0;
                 int j, k, num = (*regionFace)[i].getApex().count();
                 for (j=0, k=num-1; j<num; k=j++)//add degree of all apex
@@ -74,6 +79,8 @@ void StoreDefinitionFileNodeOnRegionFace::storeNodeOnRegionFace(QString mffPath,
                     else
                         degree = degree + (acos( a.dotProduct( a-node.xyz, b-node.xyz) / (aDis * bDis)) * 180 / pi);
                 }
+
+                //store nodes in the area
                 if ( (degree <= 360+degError && degree >= 360-degError))//in the area -> store
                 {
                     (*regionFace)[i].addNodeOnFace( sl[0].toInt(), sl[1].toFloat(), sl[2].toFloat(), sl[3].toFloat(),

@@ -1,11 +1,18 @@
+/*
+ * determine if the nodes are within the area
+ * change boundary type and group number of nodes in the area
+ * write new file
+*/
 #include "modifydefinitionfile.h"
+
+const float pi = 3.1415926;
 
 ModifyDefinitionFile::ModifyDefinitionFile()
 {
 
 }
 
-void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *region, float disError)
+void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFace, float disError, float degError)
 {
     qDebug()<< "writing file...";
 
@@ -29,18 +36,21 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *region, 
     //write header
     int customizedGroup = -1;
     Node node;
+    QVector3D a, b;
+    float aDis, bDis, degree = 0;
     float dis = -1;
     int num;
     while (!oneLine.contains("NODE"))
     {
         oneLine = streamIn.readLine();
-        if (oneLine.contains("custom"))
+        if (oneLine.contains("custom"))//get custom boundary group number
         {
             sl = oneLine.simplified().split(" ");
             customizedGroup = sl[3].remove(":").toInt();
         }
         streamOut << oneLine << endl;
     }
+
     //write nodes
     sl = oneLine.simplified().split(" ");
     while (sl[0] != "0")
@@ -49,26 +59,40 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *region, 
         sl = oneLine.simplified().split(" ");
         node.setNode( sl[1].toFloat(), sl[2].toFloat(), sl[3].toFloat());
 
-        //only change customized boundary
-// I can't set customized boundary group on inner region,
-// cos inner boundary region will cut things off which in the region
 //        if (sl[7].toInt() == customizedGroup && customizedGroup != -1)
+        for (int i=0; i<regionFace->count(); i++)//for each faces
         {
-            //check nodes are on the plane or not
-            //in fracture simulation, if a node is on the plane, it should be in the area
-            for (int i=0; i<region->count(); i++)//for each faces
+            dis = node.xyz.distanceToPlane( (*regionFace)[i].getApex()[0].xyz, (*regionFace)[i].getApex()[1].xyz, (*regionFace)[i].getApex()[2].xyz);
+            if (dis < disError && dis > -disError)//on the plane
             {
-                dis = node.xyz.distanceToPlane( (*region)[i].getApex()[0].xyz, (*region)[i].getApex()[1].xyz, (*region)[i].getApex()[2].xyz);
-                if (dis < disError && dis > -disError)//on the plane
+                //only handle convex polygon
+                //check whether nodes are in the area or not
+                degree = 0;
+                int j, k, number = (*regionFace)[i].getApex().count();
+                for (j=0, k=number-1; j<number; k=j++)//add degree of all apex
                 {
-                    if ((*region)[i].getNodeOnFace().count() != 0)//on the face
+                    a = (*regionFace)[i].getApex()[j].xyz;
+                    b = (*regionFace)[i].getApex()[k].xyz;
+                    aDis = node.xyz.distanceToPoint( a);
+                    bDis = node.xyz.distanceToPoint( b);
+                    if (aDis*bDis == 0)//on the apex
                     {
-                        num = (*region)[i].findNearestNode( node);
+                        degree = 360;
+                        j = number;
+                    }
+                    else
+                        degree = degree + (acos( a.dotProduct( a-node.xyz, b-node.xyz) / (aDis * bDis)) * 180 / pi);
+                }
+
+                //change nodes properties which are in the area
+                if ( (degree <= 360+degError && degree >= 360-degError))//in the area -> store
+                {
+                    if ((*regionFace)[i].getNodeOnFace().count() != 0)//on the face
+                    {
+                        num = (*regionFace)[i].findNearestNode( node);
                         sl[4] = "0";//set connected type
                         sl[7].setNum( -num);//set connected group
-                        qDebug()<<-num;
-
-                    }else//on the null face
+                    } else//on the null face
                     {
                         sl[4] = "0";//cancle const boundary head type on the null face
                         sl[7] = "0";
@@ -80,7 +104,6 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *region, 
                 }
             }
         }
-
         streamOut << oneLine << endl;
     }
     //write configuration
@@ -90,6 +113,6 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *region, 
         streamOut << oneLine << endl;
     }
 
-    qDebug()<< "complete" << endl
+    qDebug()<< endl << "complete" << endl
             << fileOut.fileName() << " is created";
 }

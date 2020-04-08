@@ -100,7 +100,7 @@ void SlabRegion::setRegionFace(QString regionPath, QList<Face> *regionFace)
             (*regionFace)[5].addApex( center+scan+tran+high);
 
             QString qs;
-            std::string s;
+            qDebug()<< endl;
             for (int i=0; i<(*regionFace).count(); i++)
             {
                 qs = "Face_" + qs.setNum(i);

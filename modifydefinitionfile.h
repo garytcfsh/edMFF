@@ -6,13 +6,14 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+#include <math.h>
 
 class ModifyDefinitionFile : public ModifyFile
 {
 public:
     ModifyDefinitionFile();
 
-    void writeFile( QString, QList<Face>*, float);
+    void writeFile( QString, QList<Face>*, float, float);
 };
 
 #endif // MODIFYDEFINITIONFILE_H

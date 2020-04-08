@@ -67,6 +67,6 @@ void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
         outStream << hOneline << endl;
     }
 
-    qDebug()<< "merged" << endl;
+    qDebug()<< endl << "merged" << endl;
 
 }
