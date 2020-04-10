@@ -5,15 +5,12 @@ FixHybridDefinition::FixHybridDefinition()
     //merge file
     qDebug()<< endl << "dfn definition file (.mff)";
     QTextStream d( stdin);
-    QString dfnPath = d.readLine();
+    dfnPath = d.readLine();
     qDebug()<< endl << "hybrid definition file (.mff)";
     QTextStream h( stdin);
-    QString hybridPath = h.readLine();
-    mergefile = new DFN2Hybrid();
-    mergefile->merge( dfnPath, hybridPath);
+    hybridPath = h.readLine();
 
     //read region file
-    QString regionPath;
     qDebug()<< "select input region type: 1. box_region 2. slab_region";
     QTextStream s( stdin);
     QString regionType = s.readLine();
@@ -31,6 +28,18 @@ FixHybridDefinition::FixHybridDefinition()
     regionPath = sr.readLine();
     inputBoundaryRegion->setRegionFace( regionPath, regionFace);
 
+
+
+}
+
+void FixHybridDefinition::merge()
+{
+    mergefile = new DFN2Hybrid();
+    mergefile->merge( dfnPath, hybridPath);
+}
+
+void FixHybridDefinition::changeBCofNodes()
+{
     //change boundary condition of nodes
     disError = 1;
     degError = 1;
@@ -38,6 +47,10 @@ FixHybridDefinition::FixHybridDefinition()
     searchNodeOnRegionFace = new StoreDefinitionFileNodeOnRegionFace();
     searchNodeOnRegionFace->storeNodeOnRegionFace( hybridPath, regionFace, disError, degError);
 
+}
+
+void FixHybridDefinition::writeFile()
+{
     //write file
     modifyFile = new ModifyDefinitionFile();
     modifyFile->writeFile( hybridPath, regionFace, disError, degError);

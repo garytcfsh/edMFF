@@ -13,3 +13,8 @@ EdMff::EdMff()
 {
     regionFace = new QList< Face>;
 }
+
+void EdMff::readRegion()
+{
+
+}

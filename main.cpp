@@ -19,9 +19,13 @@ int main(int argc, char *argv[])
     QString i = "0";
     i = QString( QString::fromLocal8Bit( line.c_str()));
     if (i == "1")
+    {
         FixHybridDefinition fixHybridDefinition;
+    }
     else if (i == "2")
+    {
         SetConstantHead setConstantHead;
+    }
     else
     {
         cout << "function error" << endl;

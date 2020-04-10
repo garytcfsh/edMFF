@@ -17,6 +17,8 @@ class EdMff
 public:
     EdMff();
 
+    void readRegion();
+
 protected:
     InputBoundaryRegion *inputBoundaryRegion;
     SearchNodeOnRegionFace *searchNodeOnRegionFace;
@@ -24,6 +26,7 @@ protected:
     MergeFile *mergefile;
     QList< Face> *regionFace;
     float disError, degError;
+    QString dfnPath, hybridPath, regionPath;
 
 };
 
