@@ -13,6 +13,7 @@
 #include "storerestartfilenodeonregionface.h"
 #include "dfn2hybrid.h"
 #include "modifydefinitionfile.h"
+#include <QDebug>
 
 class FixHybridDefinition : public EdMff
 {

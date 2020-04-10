@@ -113,6 +113,6 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
         streamOut << oneLine << endl;
     }
 
-    qDebug()<< endl << "complete" << endl
+    qDebug() << "complete" << endl
             << fileOut.fileName() << " is created";
 }

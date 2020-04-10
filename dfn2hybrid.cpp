@@ -7,6 +7,7 @@ DFN2Hybrid::DFN2Hybrid()
 
 void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
 {
+    qDebug()<< endl << "merging file...";
     QFile fFile, hFile, outFile;
     QTextStream fStream, hStream, outStream;
     QString fOneline, hOneline;
@@ -67,6 +68,6 @@ void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
         outStream << hOneline << endl;
     }
 
-    qDebug()<< endl << "merged" << endl;
+    qDebug()<< "merged" << endl;
 
 }

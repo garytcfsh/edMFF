@@ -9,6 +9,8 @@ StoreDefinitionFileNodeOnRegionFace::StoreDefinitionFileNodeOnRegionFace()
 
 void StoreDefinitionFileNodeOnRegionFace::storeNodeOnRegionFace(QString mffPath, QList<Face> *regionFace, float disError, float degError)
 {
+    qDebug()<< endl << "storing...";
+
     QFile fileIn;
     QTextStream streamIn;
     QString oneLine;
@@ -90,5 +92,5 @@ void StoreDefinitionFileNodeOnRegionFace::storeNodeOnRegionFace(QString mffPath,
         }
     }
     fileIn.close();
-    qDebug()<< endl << "store complete" << endl;
+    qDebug() << "store complete" << endl;
 }
