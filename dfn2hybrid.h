@@ -2,6 +2,7 @@
 #define DFN2HYBRID_H
 
 #include "mergefile.h"
+#include "boundarycondition.h"
 
 class DFN2Hybrid : public MergeFile
 {
@@ -9,6 +10,8 @@ public:
     DFN2Hybrid();
 
     void merge(QString, QString);
+
+    QList< BoundaryCondition> fracBD, hybridBD;
 };
 
 #endif // DFN2HYBRID_H

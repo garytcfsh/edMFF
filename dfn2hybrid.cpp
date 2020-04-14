@@ -2,7 +2,8 @@
 
 DFN2Hybrid::DFN2Hybrid()
 {
-
+//    fracBD = new QList< BoundaryCondition>;
+//    hybridBD = new QList< BoundaryCondition>;
 }
 
 void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
@@ -23,14 +24,39 @@ void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
     outFile.open( QFile::WriteOnly|QFile::Text);
     outStream.setDevice( &outFile);
 
+    int i=0;
+    QString name, group, type;
     while (!hOneline.contains("NODE"))//write hybrid header to new file
     {
         hOneline = hStream.readLine();
         outStream << hOneline << endl;
+
+        if (hOneline.contains( "BOUNDARY GROUP"))
+        {
+            hybridBD.append( BoundaryCondition());
+            hSl = hOneline.simplified().split(" ");
+            name = hSl[4].remove('"');
+            group = hSl[3].remove(":");
+            type = hSl[6];
+            hybridBD[i].init( name, group, type);
+            i++;
+        }
     }
+    i=0;
     while (!fOneline.contains("NODE"))//skip dfn header
     {
         fOneline = fStream.readLine();
+
+        if (fOneline.contains( "BOUNDARY GROUP"))
+        {
+            fracBD.append( BoundaryCondition());
+            fSl = fOneline.simplified().split(" ");
+            name = fSl[4].remove('"');
+            group = fSl[3].remove(":");
+            type = fSl[6];
+            fracBD[i].init( name, group, type);
+            i++;
+        }
     }
     fOneline = fStream.readLine();
     fSl = fOneline.simplified().split(" ");
