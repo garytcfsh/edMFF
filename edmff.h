@@ -10,6 +10,7 @@
 #include <QTextStream>
 #include <iostream>
 #include <QDebug>
+#include <QFile>
 
 
 class EdMff
@@ -17,7 +18,7 @@ class EdMff
 public:
     EdMff();
 
-    void readRegion();
+    QString readRegion();
 
 protected:
     InputBoundaryRegion *inputBoundaryRegion;

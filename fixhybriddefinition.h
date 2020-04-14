@@ -20,11 +20,6 @@ class FixHybridDefinition : public EdMff
 public:
     FixHybridDefinition();
 
-    void merge();
-    void readRegion();
-    void changeBCofNodes();
-    void writeFile();
-
 private:
 };
 
