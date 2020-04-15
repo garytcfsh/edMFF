@@ -32,6 +32,22 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
     fileOut.open( QFile::WriteOnly|QFile::Text);
     streamOut.setDevice( &fileOut);
 
+    //find fracture nodes number
+    qint64 start;
+    start = streamIn.pos();
+    while (!streamIn.atEnd() && !oneLine.contains( "MatrixElem"))
+        oneLine = streamIn.readLine();
+    oneLine = streamIn.readLine();
+    sl = oneLine.simplified().split(" ");
+    if (oneLine == "")
+    {
+        qDebug()<<"definition file error, can not find frac nodes number";
+        exit(1);//restart file error
+    }
+    int fracNodeNum = sl[2].toInt() - 1;
+    oneLine = "";
+    streamIn.seek( start);
+
     //write file
     //write header
     int customizedGroup = -1;
@@ -53,7 +69,7 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
 
     //write nodes
     sl = oneLine.simplified().split(" ");
-    while (sl[0] != "0")
+    for (int i=0; i<fracNodeNum; i++)
     {
         oneLine = streamIn.readLine();
         sl = oneLine.simplified().split(" ");
