@@ -69,7 +69,8 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
 
     //write nodes
     sl = oneLine.simplified().split(" ");
-    for (int i=0; i<fracNodeNum; i++)
+//    for (int i=0; i<fracNodeNum; i++)
+    for (int i=0; i<14090; i++)
     {
         oneLine = streamIn.readLine();
         sl = oneLine.simplified().split(" ");
