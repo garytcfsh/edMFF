@@ -24,7 +24,7 @@ FixHybridDefinition::FixHybridDefinition()
 
     //merge file
     mergefile = new DFN2Hybrid();
-    mergefile->merge( dfnPath, hybridPath);
+    int dfnFracNodeNum = mergefile->merge( dfnPath, hybridPath);
 
     //change boundary condition of nodes
     disError = 1;
@@ -35,6 +35,6 @@ FixHybridDefinition::FixHybridDefinition()
 
     //write file
     modifyFile = new ModifyDefinitionFile();
-    modifyFile->writeFile( hybridPath, regionFace, disError, degError);
+    modifyFile->writeFile( hybridPath, regionFace, disError, degError, dfnFracNodeNum);
 
 }

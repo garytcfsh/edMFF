@@ -6,7 +6,7 @@ DFN2Hybrid::DFN2Hybrid()
 //    hybridBD = new QList< BoundaryCondition>;
 }
 
-void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
+int DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
 {
     qDebug()<< endl << "merging file...";
     QFile fFile, hFile, outFile;
@@ -24,6 +24,7 @@ void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
     outFile.open( QFile::WriteOnly|QFile::Text);
     outStream.setDevice( &outFile);
 
+    int dfnFracNodeNum = 0;
     int i=0;
     QString name, group, type;
     while (!hOneline.contains("NODE"))//write hybrid header to new file
@@ -58,6 +59,47 @@ void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
             i++;
         }
     }
+
+    //error handling
+    int bd = 1;
+    if (fracBD.count() == hybridBD.count())
+    {
+        for (int i=0; i<fracBD.count(); i++)
+        {
+            if (fracBD[i].getName() != hybridBD[i].getName())
+            {
+                bd = 0;
+            }
+        }
+    }
+    else
+    {
+        bd = 0;
+    }
+    if (bd == 0)
+    {
+        qDebug()<<"";
+        qDebug()<<"boundary conditions in dfn and hybrid file are different";
+        qDebug()<<"do you want to continue? it may make error! (y or n)";
+        QTextStream d( stdin);
+        QString in = d.readLine();
+        if (in == "N" | in == "n")
+        {
+            qDebug()<<"Exit";
+            exit(3);
+        }
+        else if (in == "Y" | in == "y")
+        {
+            qDebug()<<"continue to merge";
+        }
+        else
+        {
+            qDebug()<<"Exit";
+            exit(2);
+        }
+    }
+
+
     fOneline = fStream.readLine();
     fSl = fOneline.simplified().split(" ");
     while (fSl[0] != "0")//write dfn frac node to new file
@@ -67,6 +109,7 @@ void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
         fSl = fOneline.simplified().split(" ");
         hStream.readLine();//skip hybrid frac node
         hSl = hOneline.simplified().split(" ");
+        dfnFracNodeNum++;
     }
     while (hSl[0] != "FracElem")//write hybrid remain node to new file
     {
@@ -95,5 +138,5 @@ void DFN2Hybrid::merge(QString dfnPath, QString hybridPath)
     }
 
     qDebug()<< "merged" << endl;
-
+    return dfnFracNodeNum;
 }

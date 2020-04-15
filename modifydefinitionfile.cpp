@@ -12,7 +12,7 @@ ModifyDefinitionFile::ModifyDefinitionFile()
 
 }
 
-void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFace, float disError, float degError)
+void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFace, float disError, float degError, int dfnFracNodeNum)
 {
     qDebug()<< "writing file...";
 
@@ -68,9 +68,7 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
     }
 
     //write nodes
-    sl = oneLine.simplified().split(" ");
-//    for (int i=0; i<fracNodeNum; i++)
-    for (int i=0; i<14090; i++)
+    for (int n=0; n<dfnFracNodeNum; n++)
     {
         oneLine = streamIn.readLine();
         sl = oneLine.simplified().split(" ");
@@ -121,6 +119,17 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
                 }
             }
         }
+        streamOut << oneLine << endl;
+    }
+    //handle hybrid remain frac nodes
+    for (int i=dfnFracNodeNum; i<fracNodeNum; i++)
+    {
+        oneLine = streamIn.readLine();
+        sl = oneLine.simplified().split(" ");
+        sl[4] = "0";
+        sl[7] = "0";
+        for (int j=0; j<sl.count(); j++)
+            oneLine = oneLine + '\t' + sl[j];
         streamOut << oneLine << endl;
     }
     //write configuration

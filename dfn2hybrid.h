@@ -9,7 +9,7 @@ class DFN2Hybrid : public MergeFile
 public:
     DFN2Hybrid();
 
-    void merge(QString, QString);
+    int merge(QString, QString);
 
     QList< BoundaryCondition> fracBD, hybridBD;
 };

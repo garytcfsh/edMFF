@@ -12,7 +12,7 @@ public:
     MergeFile();
     virtual ~MergeFile(){}
 
-    virtual void merge(QString, QString){}
+    virtual int merge(QString, QString){}
 };
 
 #endif // MERGEFILE_H

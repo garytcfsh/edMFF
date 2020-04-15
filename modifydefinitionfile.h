@@ -13,7 +13,7 @@ class ModifyDefinitionFile : public ModifyFile
 public:
     ModifyDefinitionFile();
 
-    void writeFile( QString, QList<Face>*, float, float);
+    void writeFile( QString, QList<Face>*, float, float, int);
 };
 
 #endif // MODIFYDEFINITIONFILE_H

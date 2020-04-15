@@ -2,6 +2,7 @@
 exit code
     1 for input file error
     2 for input argument error
+    3 for select stop
 
 */
 
