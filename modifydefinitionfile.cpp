@@ -66,7 +66,7 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
         }
         streamOut << oneLine << endl;
     }
-
+int ii=0;
     //write nodes
     for (int n=0; n<dfnFracNodeNum; n++)
     {
@@ -106,7 +106,10 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
                     {
                         num = (*regionFace)[i].findNearestNode( node);
                         sl[4] = "0";//set connected type
+                        sl[7] = "0";
+if (ii<5000)
                         sl[7].setNum( -num);//set connected group
+ii++;
                     } else//on the null face
                     {
                         sl[4] = "0";//cancle const boundary head type on the null face
@@ -128,6 +131,7 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
         sl = oneLine.simplified().split(" ");
         sl[4] = "0";
         sl[7] = "0";
+        oneLine = "";
         for (int j=0; j<sl.count(); j++)
             oneLine = oneLine + '\t' + sl[j];
         streamOut << oneLine << endl;
@@ -135,7 +139,7 @@ void ModifyDefinitionFile::writeFile( QString hybridPath, QList< Face> *regionFa
     //write configuration
     while (!streamIn.atEnd())
     {
-        oneLine = streamIn.readAll();
+        oneLine = streamIn.readLine();
         streamOut << oneLine << endl;
     }
 
